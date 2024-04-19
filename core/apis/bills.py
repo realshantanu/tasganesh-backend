@@ -134,4 +134,3 @@ def create_bill():
     db.session.commit()
     return jsonify('Bill generated!')
 
-
