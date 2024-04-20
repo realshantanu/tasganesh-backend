@@ -11,6 +11,7 @@ from core.models import (
     Vehicle,
     VehicleHistory
 )
+from urllib.parse import unquote
 
 bills = Blueprint('bills', __name__)
 
@@ -135,3 +136,57 @@ def create_bill():
     db.session.commit()
     return jsonify('Bill generated!')
 
+
+
+@serialize_data
+@bills.route('/api/bill/<path:bill_number>', methods=['GET'])
+def get_bill(bill_number):
+    bill_number = unquote(bill_number)
+    bill = Bill.query.filter_by(id=bill_number).first()
+    if not bill:
+        return jsonify({'error': 'Bill not found'}), 404
+
+    customer = Customer.query.filter_by(id=bill.customer_id).first()
+    vehicle = Vehicle.query.filter_by(id=bill.vehicle_id).first()
+    vehicle_history = VehicleHistory.query.filter_by(id=bill.vehicle_history_id).first()
+    services = db.session.query(
+        ServiceItem.service_name.label('serviceName'),
+        BillServiceItemMapping.item_rate.label('itemRate'),
+        BillServiceItemMapping.item_quantity.label('itemQuantity')
+    ).join(
+        ServiceItem,
+        BillServiceItemMapping.service_item_id == ServiceItem.id
+    ).filter(
+        BillServiceItemMapping.bill_id == bill.id
+    ).all()
+
+    result = {
+        'billNumber': bill.id,
+        'currentDate': bill.bill_date.strftime('%Y-%m-%d'),
+        'customer': customer.name,
+        'address': customer.address,
+        'mobileNumber': customer.mobile_number,
+        'vehicleNumber': vehicle.vehicle_number,
+        'vehicleKm': vehicle_history.vehicle_km,
+        'nextKm': vehicle_history.next_km,
+        'selectDiscountAmount': bill.discount_amount,
+        'selectPaidBool': bill.is_paid,
+        'totalAmount': bill.total_amount,
+        'services': [row._asdict() for row in services]
+    }
+    return jsonify(result)
+
+
+@serialize_data
+@bills.route('/api/bill/update/<path:bill_number>', methods=['PUT'])
+def update_bill(bill_number):
+    bill_number = unquote(bill_number)
+    bill = Bill.query.filter_by(id=bill_number).first()
+    
+    if not bill:
+        return jsonify({'error': 'Bill not found'}), 404
+    
+    bill.is_paid = True
+
+    db.session.commit()
+    return jsonify('Bill updated!')

@@ -52,7 +52,8 @@ def get_range_report():
         'bill_no': bill.id,
         'customer': bill.customer.name,
         'amount': bill.total_amount,
-        'status': 'Paid' if bill.is_paid else 'Unpaid'
+        'status': 'Paid' if bill.is_paid else 'Unpaid',
+        'vehicle_number': bill.vehicle.vehicle_number
     } for bill in bills]
 
     return jsonify({

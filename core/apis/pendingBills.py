@@ -15,7 +15,8 @@ def get_pending_bills():
         'bill_no': bill.id,
         'customer': bill.customer.name,
         'amount': bill.total_amount,
-        'status': 'Unpaid'
+        'status': 'Unpaid',
+        'vehicle_number': bill.vehicle.vehicle_number
     } for bill in pending_bills]
 
     return jsonify({
