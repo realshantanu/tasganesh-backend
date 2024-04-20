@@ -28,12 +28,13 @@ def create_app():
     db.init_app(app)
 
     from core.views import home
-    from core.apis import bills,dailyReport,rangeReport,pendingBills
+    from core.apis import bills,dailyReport,rangeReport,pendingBills, services
 
     app.register_blueprint(home.home)
     app.register_blueprint(bills.bills)
     app.register_blueprint(dailyReport.dailyReport)
     app.register_blueprint(rangeReport.rangeReport)
     app.register_blueprint(pendingBills.pendingBills)
+    app.register_blueprint(services.services)
     
     return app

@@ -25,7 +25,8 @@ def get_service_names():
 @serialize_data
 @bills.route('/api/new/bill/number',methods=['GET'])
 def get_new_bill_number():
-    last_bill = Bill.query.order_by(desc(Bill.id)).first()
+    all_bills = Bill.query.all()
+    last_bill = sorted(all_bills, key=lambda bill: int(bill.id.split('/')[0]), reverse=True)[0]
     current_year = datetime.now().year
     next_year = current_year + 1 if datetime.now().month > 3 else current_year
     financial_year = f"{str(current_year)[-2:]}-{str(next_year)[-2:]}"
