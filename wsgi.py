@@ -1,4 +1,5 @@
 from waitress import serve
+import multiprocessing
 from core import create_app,db
 from core.models import (
     Customer,
@@ -22,4 +23,4 @@ if __name__ == '__main__':
     if (mode == 'dev'):
         app.run(host='0.0.0.0', port=5000, debug=True)
     else:
-        serve(app, host='0.0.0.0', port=8000, threads=4)
+        serve(app, host="0.0.0.0", port=8080, threads=multiprocessing.cpu_count())
