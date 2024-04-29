@@ -23,7 +23,7 @@ def create_app():
     CORS(app)
 
     app.config['SECRET_KEY'] = SQL_ACLCHEMY_KEY
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{DB_USER}:{DB_PWD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{DB_USER}:{DB_PWD}@{DB_HOST}/{DB_NAME}'
     
     db.init_app(app)
 
