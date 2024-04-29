@@ -9,7 +9,7 @@ from core.models import (
     VehicleHistory
 )
 
-mode = 'dev'
+mode = 'prod'
 
 app = create_app()
 
