@@ -10,7 +10,6 @@ with app.app_context():
     # db.reflect()
     # db.drop_all()
     db.create_all()
-            "config": { "runtime": "python3.10.12" }
 
 if __name__ == '__main__':
     if (mode == 'dev'):
