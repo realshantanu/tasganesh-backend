@@ -2,7 +2,7 @@ from waitress import serve
 import multiprocessing
 from core import create_app,db
 
-mode = 'prod'
+mode = 'dev'
 
 app = create_app()
 
